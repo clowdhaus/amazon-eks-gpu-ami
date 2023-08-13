@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/cisagov/pre-commit-packer
-    rev: v0.0.2
+    rev: 44de1f003b55c2bc3207648e774dce47386ccecc
     hooks:
       - id: packer_validate
       - id: packer_fmt
@@ -10,7 +10,7 @@ repos:
       - id: check-merge-conflict
       - id: end-of-file-fixer
   - repo: https://github.com/terraform-docs/terraform-docs
-    rev: "v0.16.0"
+    rev: v0.16.0
     hooks:
       - id: terraform-docs-go
-        args: ["markdown", "./ami", "--output-file", "README.md"]
+        args: ["markdown", "table", "--output-file", "README.md", "."]
