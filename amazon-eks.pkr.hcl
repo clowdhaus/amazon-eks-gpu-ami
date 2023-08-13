@@ -188,7 +188,7 @@ source "amazon-ebs" "this" {
   security_group_ids = var.security_group_ids
 
   dynamic "security_group_filter" {
-    for_each = length(var.security_group_filter) > 0 ? [var.security_group_filter] : []
+    for_each = length(var.security_group_filter) > 0 ? var.security_group_filter : []
 
     content {
       filters = try(security_group_filter.value.filters, null)
@@ -201,7 +201,7 @@ source "amazon-ebs" "this" {
   source_ami              = data.amazon-parameterstore.this.value
 
   dynamic "subnet_filter" {
-    for_each = length(var.subnet_filter) > 0 ? [var.subnet_filter] : []
+    for_each = length(var.subnet_filter) > 0 ? var.subnet_filter : []
 
     content {
       filters   = try(subnet_filter.value.filters, null)
@@ -217,7 +217,7 @@ source "amazon-ebs" "this" {
   user_data_file                            = var.user_data_file
 
   dynamic "vpc_filter" {
-    for_each = length(var.vpc_filter) > 0 ? [var.vpc_filter] : []
+    for_each = length(var.vpc_filter) > 0 ? var.vpc_filter : []
 
     content {
       filters = try(vpc_filter.value.filters, null)
@@ -248,9 +248,42 @@ build {
   provisioner "shell" {
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
 
-    scripts = [
-      "scripts/install.sh",
-      "scripts/cleanup.sh",
-    ]
+    inline  = try(var.shell_provisioner1.inline, null)
+    script  = try(var.shell_provisioner1.script, null)
+    scripts = try(var.shell_provisioner1.scripts, ["scripts/dummy.sh"])
+
+    env              = try(var.shell_provisioner1.env, null)
+    environment_vars = try(var.shell_provisioner1.environment_vars, null)
+
+    expect_disconnect = try(var.shell_provisioner1.expect_disconnect, false)
+    pause_after       = try(var.shell_provisioner1.pause_after, "15s")
+  }
+
+  provisioner "shell" {
+    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+
+    inline  = try(var.shell_provisioner2.inline, null)
+    script  = try(var.shell_provisioner2.script, null)
+    scripts = try(var.shell_provisioner2.scripts, ["scripts/dummy.sh"])
+
+    env              = try(var.shell_provisioner2.env, null)
+    environment_vars = try(var.shell_provisioner2.environment_vars, null)
+
+    expect_disconnect = try(var.shell_provisioner2.expect_disconnect, false)
+    pause_after       = try(var.shell_provisioner2.pause_after, "15s")
+  }
+
+  provisioner "shell" {
+    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+
+    inline  = try(var.shell_provisioner3.inline, null)
+    script  = try(var.shell_provisioner3.script, null)
+    scripts = try(var.shell_provisioner3.scripts, ["scripts/dummy.sh"])
+
+    env              = try(var.shell_provisioner3.env, null)
+    environment_vars = try(var.shell_provisioner3.environment_vars, null)
+
+    expect_disconnect = try(var.shell_provisioner3.expect_disconnect, false)
+    pause_after       = try(var.shell_provisioner3.pause_after, "15s")
   }
 }

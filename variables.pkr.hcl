@@ -20,7 +20,7 @@ variable "ami_block_device_mappings" {
   default = [
     {
       device_name           = "/dev/xvda"
-      volume_size           = 20
+      volume_size           = 10
       volume_type           = "gp3"
       delete_on_termination = true
     },
@@ -117,7 +117,7 @@ variable "launch_block_device_mappings" {
   default = [
     {
       device_name           = "/dev/xvda"
-      volume_size           = 20
+      volume_size           = 10
       volume_type           = "gp3"
       delete_on_termination = true
     },
@@ -553,7 +553,7 @@ variable "iam_instance_profile" {
 variable "instance_type" {
   description = "The EC2 instance type to use while building the AMI, such as `m5.large`"
   type        = string
-  default     = "g4dn.8xlarge"
+  default     = "c5.xlarge"
 }
 
 variable "fleet_tags" {
@@ -588,8 +588,8 @@ variable "security_group_ids" {
 
 variable "security_group_filter" {
   description = "Filters used to populate the `security_group_ids` field. `security_group_ids` take precedence over this"
-  type        = map(string)
-  default     = {}
+  type        = list(map(string))
+  default     = []
 }
 
 variable "session_manager_port" {
@@ -612,8 +612,8 @@ variable "skip_profile_validation" {
 
 variable "subnet_filter" {
   description = "Filters used to populate the subnet_id field. `subnet_id` take precedence over this"
-  type        = map(string)
-  default     = {}
+  type        = list(map(string))
+  default     = []
 }
 
 variable "subnet_id" {
@@ -648,8 +648,8 @@ variable "user_data_file" {
 
 variable "vpc_filter" {
   description = "Filters used to populate the `vpc_id` field. `vpc_id` take precedence over this"
-  type        = map(string)
-  default     = {}
+  type        = list(map(string))
+  default     = []
 }
 
 variable "vpc_id" {
@@ -666,4 +666,23 @@ variable "metadata_options" {
     http_tokens                 = "required"
     http_put_response_hop_limit = 1
   }
+}
+
+################################################################################
+# Build
+################################################################################
+
+variable "shell_provisioner1" {
+  description = "Values passed to the first shell provisioner"
+  default     = {}
+}
+
+variable "shell_provisioner2" {
+  description = "Values passed to the second shell provisioner"
+  default     = {}
+}
+
+variable "shell_provisioner3" {
+  description = "Values passed to the third/last shell provisioner"
+  default     = {}
 }
