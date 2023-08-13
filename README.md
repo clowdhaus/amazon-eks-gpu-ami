@@ -1,13 +1,22 @@
-# Amazon Machine Image (AMI) Packer Configuration(s)
+# Amazon EKS GPU
+
+Packer configuration to build an Amazon EKS AMI suitable for use with EC2 instances backed by NVIDIA GPUs.
+
+## Build an AMI
+
+Users will need to have a default VPC in the region where the AMI will be created, or provide a subnet ID via the `subnet_id` variable. The remaining variables are optional and can be modified to suit; either through the appropriate `*.pkrvars.hcl` file or by passing via `-var 'key=value'` on the Packer CLI. See the `variables.pkr.hcl` file for variables that are available for customization.
+
+First, initialize the project:
 
 ```sh
-packer init .
-packer build .
+packer init -upgrade .
 ```
 
-[Amazon Drivers](https://github.com/amzn/amzn-drivers)
-  - [ENA](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking-ena.html)
-  - [EFA](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html)
+To build an AMI:
+
+```sh
+packer build -var-file=gpu.pkrvars.hcl .
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -149,3 +158,7 @@ No modules.
 
 No outputs.
 <!-- END_TF_DOCS -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/amazon-eks-gpu-ami/blob/main/LICENSE).
