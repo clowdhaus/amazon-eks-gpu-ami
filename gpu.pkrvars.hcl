@@ -1,4 +1,4 @@
-region        = "eu-central-1"
+region        = "us-west-2"
 instance_type = "g4dn.8xlarge"
 
 ami_block_device_mappings = [

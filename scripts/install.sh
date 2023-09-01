@@ -3,19 +3,19 @@
 set -x
 
 # https://docs.nvidia.com/datacenter/tesla/index.html
-NVIDIA_DRIVER_VERSION=${NVIDIA_DRIVER_VERSION:-"535.86.10"}
+NVIDIA_DRIVER_VERSION=${NVIDIA_DRIVER_VERSION:-"535.54.03"}
 
 # CUDA toolkit https://docs.nvidia.com/datacenter/tesla/drivers/index.html#cuda-drivers
 CUDA_TOOLKIT_PACKAGE=${CUDA_TOOLKIT_PACKAGE:-cuda-toolkit-12-2}
 
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa-verify.html
-EFA_INSTALLER_VERSION=${EFA_INSTALLER_VERSION:-"1.25.0"}
+EFA_INSTALLER_VERSION=${EFA_INSTALLER_VERSION:-"1.25.1"}
 
 # https://www.open-mpi.org/software/hwloc/v2.9/
 MPI_HWLOC_VERSION=${MPI_HWLOC_VERSION:-"2.9.2"}
 
 # https://github.com/aws/aws-ofi-nccl/releases
-AWS_OFI_NCCL_VERSION=${AWS_OFI_NCCL_VERSION:-"1.7.1"}
+AWS_OFI_NCCL_VERSION=${AWS_OFI_NCCL_VERSION:-"1.7.2"}
 
 # Remove existing NVIDIA driver if present
 if yum list installed 2>/dev/null | grep -q "^nvidia-driver"; then
@@ -27,7 +27,7 @@ yum install gcc10 rsync dkms -y -q
 cd /tmp
 
 # CUDA tooklit - can be installed on host or deployed in container
-if ${INSTALL_NVIDIA_CONTAINER_TOOLKIT:-true}; then
+if ${INSTALL_CUDA_TOOLKIT:-true}; then
   yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo
   yum clean all -q
   yum install libglvnd-glx ${CUDA_TOOLKIT_PACKAGE} -y -q
@@ -57,7 +57,7 @@ systemctl enable nvidia-fabricmanager
 rm -rf fabricmanager-linux*
 
 # NVIDIA container toolkit - can be installed on host or deployed in container
-if ${INSTALL_NVIDIA_CONTAINER_TOOLKIT:-true}; then
+if ${INSTALL_NVIDIA_CONTAINER_TOOLKIT:-false}; then
   DISTRIBUTION=$(. /etc/os-release;echo $ID$VERSION_ID)
   curl -s -L https://nvidia.github.io/nvidia-docker/${DISTRIBUTION}/nvidia-docker.repo | tee /etc/yum.repos.d/nvidia-docker.repo
   yum install -y nvidia-container-toolkit -q
