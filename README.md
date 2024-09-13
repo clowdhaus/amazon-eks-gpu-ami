@@ -1,5 +1,10 @@
 # Amazon EKS GPU
 
+> [!IMPORTANT]  
+> The official Amazon EKS AMI repository now provides the necessary build scripts and configuration for creating EKS AMIs using AL2023 suitable for NVIDIA GPUs
+> Refer to this [pull request](https://github.com/awslabs/amazon-eks-ami/pull/1924) for further details
+> This project is now deprecated and users should switch to using the [configurations provided by the Amazon EKS team](https://github.com/awslabs/amazon-eks-ami)
+
 Packer configuration to build an Amazon EKS AMI suitable for use with EC2 instances backed by NVIDIA GPUs.
 
 ## Build an AMI
